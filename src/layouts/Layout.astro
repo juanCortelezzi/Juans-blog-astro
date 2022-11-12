@@ -1,21 +1,83 @@
 ---
-export interface Props {
-	title: string;
-}
+import "../global.css"
+import { classNames } from "../utils/lib";
 
-const { title } = Astro.props;
+export interface Props {
+  title: string;
+  class?: string;
+}
+const {
+  props,
+  url: { pathname },
+} = Astro;
+
+const buttons = [
+  { text: "Falopa", active: pathname === "/falopa" },
+  { text: "Button", active: pathname === "/" },
+];
 ---
 
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-	</head>
-	<body>
-		<slot />
-	</body>
+  <head>
+    <script is:inline>
+      // ☝️ This script prevent the FART effect.
+      const defaultTheme = "dark";
+      const theme = localStorage.getItem("theme");
+      if (theme === null) {
+        document.documentElement.setAttribute("data-theme", defaultTheme);
+      } else {
+        document.documentElement.setAttribute("data-theme", theme);
+      }
+      // "theme" LocalStorage value is set by the package to remember user preference.
+      // The value is checked and applyed before rendering anything.
+    </script>
+    <script>
+      import { themeChange } from "theme-change";
+      themeChange();
+      // 👆 you could import the CDN directly instead of these two lines
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{props.title}</title>
+  </head>
+  <body class="container mx-auto min-h-screen max-w-2xl">
+    <header class="navbar mb-5 p-0 sm:mb-10">
+      <div class="navbar-start">
+        <div class="ml-[-1rem] inline-flex">
+          {
+            buttons.map(({ text, active }) => (
+              <button
+                class={classNames(
+                  "btn btn-ghost normal-case",
+                  !active && "font-normal"
+                )}
+              >
+                {text}
+              </button>
+            ))
+          }
+          <div>
+            <a
+              href="https://github.com/juancortelezzi"
+              rel="noreferrer"
+              target="_blank"
+            >
+              <button class="btn btn-ghost font-normal normal-case">
+                Github
+              </button>
+            </a>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="navbar-end"> -->
+      <!--   <ThemeMenu /> -->
+      <!-- </div> -->
+    </header>
+    <main class={classNames("grow px-4", !!props.class && Astro.props.class)}>
+      <slot />
+    </main>
+  </body>
 </html>

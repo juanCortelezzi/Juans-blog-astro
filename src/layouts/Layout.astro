@@ -1,13 +1,13 @@
 ---
-import "../global.css"
-import { classNames } from "../utils/lib";
+import { classNames } from "@/utils/lib";
 
 export interface Props {
   title: string;
   class?: string;
 }
+
 const {
-  props,
+  props: {title, class: className},
   url: { pathname },
 } = Astro;
 
@@ -22,30 +22,24 @@ const buttons = [
   <head>
     <script is:inline>
       // ☝️ This script prevent the FART effect.
-      const defaultTheme = "dark";
-      const theme = localStorage.getItem("theme");
-      if (theme === null) {
-        document.documentElement.setAttribute("data-theme", defaultTheme);
-      } else {
-        document.documentElement.setAttribute("data-theme", theme);
-      }
+      const theme = localStorage.getItem("theme") ?? "dark";
+      document.documentElement.setAttribute("data-theme", theme);
       // "theme" LocalStorage value is set by the package to remember user preference.
       // The value is checked and applyed before rendering anything.
     </script>
     <script>
       import { themeChange } from "theme-change";
       themeChange();
-      // 👆 you could import the CDN directly instead of these two lines
     </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <title>{props.title}</title>
+    <title>{title}</title>
   </head>
   <body class="container mx-auto min-h-screen max-w-2xl">
     <header class="navbar mb-5 p-0 sm:mb-10">
-      <div class="navbar-start">
+      <nav class="navbar-start">
         <div class="ml-[-1rem] inline-flex">
           {
             buttons.map(({ text, active }) => (
@@ -59,24 +53,27 @@ const buttons = [
               </button>
             ))
           }
-          <div>
-            <a
-              href="https://github.com/juancortelezzi"
-              rel="noreferrer"
-              target="_blank"
-            >
-              <button class="btn btn-ghost font-normal normal-case">
-                Github
-              </button>
-            </a>
-          </div>
+          <a
+            href="https://github.com/juancortelezzi"
+            rel="noreferrer"
+            target="_blank"
+          >
+            <button class="btn btn-ghost font-normal normal-case">
+              Github
+            </button>
+          </a>
         </div>
+      </nav>
+      <div class="navbar-end">
+        <input
+          type="checkbox"
+          data-toggle-theme="dark,light"
+          data-act-class="ACTIVECLASS"
+          class="toggle toggle-primary"
+        />
       </div>
-      <!-- <div class="navbar-end"> -->
-      <!--   <ThemeMenu /> -->
-      <!-- </div> -->
     </header>
-    <main class={classNames("grow px-4", !!props.class && Astro.props.class)}>
+    <main class={classNames("grow px-4", !!className && className)}>
       <slot />
     </main>
   </body>

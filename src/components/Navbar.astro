@@ -1,0 +1,48 @@
+---
+import { classNames } from "@/utils/lib";
+import { ThemeToggle } from "@/components/ThemeToggle";
+
+export interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+const pathname = Astro.url.pathname;
+
+const buttons = [
+  { text: "Home", path: "/" },
+  { text: "Blog", path: "/blog" },
+];
+---
+
+<header
+  class={classNames("navbar mb-5 p-0 sm:mb-10", !!className && className)}
+>
+  <nav class="navbar-start">
+    <div class="ml-[-1rem] inline-flex">
+      {
+        buttons.map(({ text, path }) => (
+          <a href={path}>
+            <button
+              class={classNames(
+                "btn btn-ghost normal-case",
+                path !== pathname && "font-normal"
+              )}
+            >
+              {text}
+            </button>
+          </a>
+        ))
+      }
+      <a
+        href="https://github.com/juancortelezzi"
+        rel="noreferrer"
+        target="_blank"
+      >
+        <button class="btn btn-ghost font-normal normal-case"> Github</button>
+      </a>
+    </div>
+  </nav>
+  <div class="navbar-end">
+    <ThemeToggle client:load />
+  </div>
+</header>

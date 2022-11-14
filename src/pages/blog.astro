@@ -1,0 +1,58 @@
+---
+import Layout from "@/layouts/PageLayout.astro";
+import { Image } from "@astrojs/image/components";
+import { MarkdownFrontmatter, markdownFrontmatterValidator } from "@/utils/lib";
+import type { MarkdownInstance } from "astro";
+import { format } from "date-fns";
+
+// Use Astro.glob() to fetch all posts, and then sort them by date.
+const posts = (
+  await Astro.glob<MarkdownInstance<MarkdownFrontmatter>>("./blog/*.{md,mdx}")
+)
+  .map((blob) => {
+    const frontmatterResult = markdownFrontmatterValidator.safeParse(
+      blob.frontmatter
+    );
+
+    if (!frontmatterResult.success) {
+      throw new Error(
+        `could not parse props of ${blob.url} - ${frontmatterResult.error}`
+      );
+    }
+
+    return { ...blob, frontmatter: frontmatterResult.data };
+  })
+  .sort((a, b) => b.frontmatter.date.valueOf() - a.frontmatter.date.valueOf());
+---
+
+<Layout
+  title="JBC - Blog"
+  description="Here you can see all the blog posts in this website."
+  class="prose-sm w-full sm:prose sm:max-w-none"
+>
+  <h1>Blog Posts</h1>
+  <div class="grid w-full grid-cols-1 gap-8 not-prose">
+    {
+      posts.map(({ frontmatter, url }) => (
+        <a href={url}>
+          <div class="not-prose card card-bordered card-compact cursor-pointer rounded-lg bg-base-300 shadow-xl">
+            <figure>
+              <Image
+                src={frontmatter.image}
+                alt={frontmatter.title}
+                format="webp"
+                width={720}
+                height={360}
+              />
+            </figure>
+            <div class="prose-sm card-body">
+              <h2 class="card-title">{frontmatter.title}</h2>
+              <time>{format(frontmatter.date, "LLLL d, yyyy")}</time>
+              <p>{frontmatter.description}</p>
+            </div>
+          </div>
+        </a>
+      ))
+    }
+  </div>
+</Layout>

@@ -1,0 +1,40 @@
+---
+import { classNames } from "@/utils/lib";
+
+type Props = {
+  title: string;
+  description: string;
+  class?: string;
+};
+
+const { title, description, class: className } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script is:inline>
+      // This script prevent the FART effect.
+      const theme = localStorage.getItem("theme") ?? "dark";
+      document.documentElement.setAttribute("data-theme", theme);
+    </script>
+    <script>
+      import { themeChange } from "theme-change";
+      themeChange();
+    </script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body
+    class={classNames(
+      "container mx-auto min-h-screen max-w-2xl",
+      !!className && className
+    )}
+  >
+    <slot />
+  </body>
+</html>

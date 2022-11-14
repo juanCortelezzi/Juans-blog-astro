@@ -1,0 +1,36 @@
+---
+import type { MarkdownLayoutProps } from "astro";
+import {
+  type MarkdownFrontmatter,
+  markdownFrontmatterValidator,
+} from "@/utils/lib";
+import { Image } from "@astrojs/image/components";
+import Navbar from "@/components/Navbar.astro";
+import BaseLayout from "./BaseLayout.astro";
+import { format } from "date-fns";
+
+type Props = MarkdownLayoutProps<MarkdownFrontmatter>;
+
+const frontmatterResult = markdownFrontmatterValidator.safeParse(
+  Astro.props.frontmatter
+);
+
+if (!frontmatterResult.success) {
+  throw new Error(
+    `could not parse props of ${Astro.url.pathname} - ${frontmatterResult.error}`
+  );
+}
+
+const { title, description, image, date } = frontmatterResult.data;
+---
+
+<BaseLayout title={title} description={description} class="px-4">
+  <Navbar />
+  <article class="prose-sm sm:prose">
+    <h1 class="mb-2">{title}</h1>
+    <time>{format(date, "LLLL d, yyyy")}</time>
+    <p>{description}</p>
+    <Image src={image} alt={title} width={720} height={360} format="webp" />
+    <slot />
+  </article>
+</BaseLayout>

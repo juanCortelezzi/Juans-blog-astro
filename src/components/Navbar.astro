@@ -1,6 +1,6 @@
 ---
 import { classNames } from "@/utils/lib";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import ThemeToggle from "@/components/ThemeToggle.astro";
 
 export interface Props {
   class?: string;
@@ -43,6 +43,6 @@ const buttons = [
     </div>
   </nav>
   <div class="navbar-end">
-    <ThemeToggle client:load />
+    <ThemeToggle />
   </div>
 </header>

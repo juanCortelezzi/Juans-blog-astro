@@ -8,8 +8,6 @@
       "@/utils/*": ["src/utils/*"],
       "@/public/*": ["public/*"],
       "@/assets/*": ["src/assets/*"]
-    },
-    "jsx": "preserve",
-    "jsxImportSource": "solid-js"
+    }
   }
 }

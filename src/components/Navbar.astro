@@ -2,9 +2,10 @@
 import { classNames } from "@/utils/lib";
 import ThemeToggle from "@/components/ThemeToggle.astro";
 
-export interface Props {
+type Props = {
   class?: string;
 }
+
 const { class: className } = Astro.props;
 const pathname = Astro.url.pathname;
 

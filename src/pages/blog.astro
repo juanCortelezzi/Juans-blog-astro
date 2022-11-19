@@ -1,16 +1,15 @@
 ---
 import Layout from "@/layouts/PageLayout.astro";
 import { Image } from "@astrojs/image/components";
-import { MarkdownFrontmatter, markdownFrontmatterValidator } from "@/utils/lib";
+import { MDXFrontmatterIn, mdxFrontmatterValidator } from "@/utils/lib";
 import type { MarkdownInstance } from "astro";
-import { format } from "date-fns";
 
 // Use Astro.glob() to fetch all posts, and then sort them by date.
 const posts = (
-  await Astro.glob<MarkdownInstance<MarkdownFrontmatter>>("./blog/*.{md,mdx}")
+  await Astro.glob<MarkdownInstance<MDXFrontmatterIn>>("./blog/*.{md,mdx}")
 )
   .map((blob) => {
-    const frontmatterResult = markdownFrontmatterValidator.safeParse(
+    const frontmatterResult = mdxFrontmatterValidator.safeParse(
       blob.frontmatter
     );
 
@@ -47,7 +46,11 @@ const posts = (
             </figure>
             <div class="prose-sm card-body">
               <h2 class="card-title">{frontmatter.title}</h2>
-              <time>{format(frontmatter.date, "LLLL d, yyyy")}</time>
+              <time>
+                {new Intl.DateTimeFormat("en-US", { dateStyle: "full" }).format(
+                  frontmatter.date
+                )}
+              </time>
               <p>{frontmatter.description}</p>
             </div>
           </div>

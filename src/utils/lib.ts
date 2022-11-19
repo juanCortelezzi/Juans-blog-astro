@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const markdownFrontmatterValidator = z
+export const mdxFrontmatterValidator = z
   .object({
     title: z.string(),
     description: z.string(),
@@ -11,10 +11,9 @@ export const markdownFrontmatterValidator = z
     return { ...frontmatter, date: new Date() };
   });
 
-export type MarkdownFrontmatter = z.input<typeof markdownFrontmatterValidator>;
-export type MarkdownFrontmatterOut = z.output<
-  typeof markdownFrontmatterValidator
->;
+export type MDXFrontmatterIn = z.input<typeof mdxFrontmatterValidator>;
+
+export type MDXFrontmatterOut = z.output<typeof mdxFrontmatterValidator>;
 
 // tailwind className string builder
 export const classNames = (...classes: (string | boolean)[]) =>

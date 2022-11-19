@@ -1,17 +1,13 @@
 ---
-import type { MarkdownLayoutProps } from "astro";
-import {
-  type MarkdownFrontmatter,
-  markdownFrontmatterValidator,
-} from "@/utils/lib";
+import type { MDXLayoutProps } from "astro";
 import { Image } from "@astrojs/image/components";
+import { MDXFrontmatterIn, mdxFrontmatterValidator } from "@/utils/lib";
 import Navbar from "@/components/Navbar.astro";
 import BaseLayout from "./BaseLayout.astro";
-import { format } from "date-fns";
 
-type Props = MarkdownLayoutProps<MarkdownFrontmatter>;
+interface Props extends MDXLayoutProps<MDXFrontmatterIn> {}
 
-const frontmatterResult = markdownFrontmatterValidator.safeParse(
+const frontmatterResult = mdxFrontmatterValidator.safeParse(
   Astro.props.frontmatter
 );
 
@@ -28,7 +24,9 @@ const { title, description, image, date } = frontmatterResult.data;
   <Navbar />
   <article class="prose-sm sm:prose">
     <h1 class="mb-2">{title}</h1>
-    <time>{format(date, "LLLL d, yyyy")}</time>
+    <time>
+      {new Intl.DateTimeFormat("en-US", { dateStyle: "full" }).format(date)}
+    </time>
     <p>{description}</p>
     <Image src={image} alt={title} width={720} height={360} format="webp" />
     <slot />

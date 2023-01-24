@@ -11,17 +11,17 @@
     "astro": "astro"
   },
   "devDependencies": {
-    "@astrojs/image": "^0.11.6",
-    "@astrojs/mdx": "^0.11.6",
-    "@astrojs/tailwind": "^2.1.2",
-    "@tailwindcss/typography": "^0.5.8",
-    "astro": "^1.6.10",
+    "@astrojs/image": "^0.12.2-beta.1",
+    "@astrojs/mdx": "1.0.0-beta.2",
+    "@astrojs/tailwind": "3.0.0-beta.2",
+    "@tailwindcss/typography": "^0.5.9",
+    "astro": "^2.0.0-beta.4",
     "autoprefixer": "^10.4.13",
-    "daisyui": "^2.41.0",
-    "postcss": "^8.4.19",
-    "sharp": "^0.31.2",
+    "daisyui": "^2.47.0",
+    "postcss": "^8.4.21",
+    "sharp": "^0.31.3",
     "tailwindcss": "^3.2.4",
-    "theme-change": "^2.2.0",
-    "zod": "^3.19.1"
+    "theme-change": "^2.3.0",
+    "zod": "^3.20.2"
   }
 }

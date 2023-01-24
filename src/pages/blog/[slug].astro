@@ -1,0 +1,40 @@
+---
+import { Image } from "@astrojs/image/components";
+import Navbar from "@/components/Navbar.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+type Props = Awaited<ReturnType<typeof getStaticPaths>>[number]["props"];
+
+export async function getStaticPaths() {
+  const blogEntries = await getCollection("blogs");
+  return blogEntries.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+const { title, description, image, date } = entry.data;
+---
+
+<BaseLayout title={title} description={description} class="px-4">
+  <Navbar />
+  <article class="prose-sm sm:prose">
+    <h1 class="mb-2">{title}</h1>
+    <time
+      >{
+        new Intl.DateTimeFormat("en-US", { dateStyle: "full" }).format(date)
+      }</time
+    >
+    <p>{description}</p><Image
+      src={image}
+      alt={title}
+      width={720}
+      height={360}
+      format="webp"
+    />
+    <Content />
+  </article>
+</BaseLayout>

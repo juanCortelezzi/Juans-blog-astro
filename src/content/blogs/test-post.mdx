@@ -1,13 +1,13 @@
 ---
-layout: ../../layouts/PostLayout.astro
+isDraft: false
 title: Lorem Ipsum
 description: This is a test post.
 image: /postAssets/gruvbox-penguin.jpg
-date: 2021-12-24
+date: "2021-12-24"
 ---
 
-import TSImage from "@/public/postAssets/typescript.png"
-import { Image } from "@astrojs/image/components"
+import TSImage from "@/public/postAssets/typescript.png";
+import { Image } from "@astrojs/image/components";
 
 ## Heading 2
 
@@ -98,7 +98,13 @@ export const Header = ({ className }: HeaderProps) => (
 
 ---
 
-<Image src={TSImage} alt="typescript image" width={720} height={360} format="webp" />
+<Image
+  src={TSImage}
+  alt="typescript image"
+  width={720}
+  height={360}
+  format="webp"
+/>
 
 ---
 

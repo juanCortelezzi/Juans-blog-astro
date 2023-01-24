@@ -1,27 +1,13 @@
 ---
 import Layout from "@/layouts/PageLayout.astro";
 import { Image } from "@astrojs/image/components";
-import { MDXFrontmatterIn, mdxFrontmatterValidator } from "@/utils/lib";
-import type { MarkdownInstance } from "astro";
+import { getCollection } from "astro:content";
+const blogEntries = await getCollection(
+  "blogs",
+  ({ data }) => data.isDraft !== true
+);
 
-// Use Astro.glob() to fetch all posts, and then sort them by date.
-const posts = (
-  await Astro.glob<MarkdownInstance<MDXFrontmatterIn>>("./blog/*.{md,mdx}")
-)
-  .map((blob) => {
-    const frontmatterResult = mdxFrontmatterValidator.safeParse(
-      blob.frontmatter
-    );
-
-    if (!frontmatterResult.success) {
-      throw new Error(
-        `could not parse props of ${blob.url} - ${frontmatterResult.error}`
-      );
-    }
-
-    return { ...blob, frontmatter: frontmatterResult.data };
-  })
-  .sort((a, b) => b.frontmatter.date.valueOf() - a.frontmatter.date.valueOf());
+blogEntries.sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
 ---
 
 <Layout
@@ -32,26 +18,26 @@ const posts = (
   <h1>Blog Posts</h1>
   <div class="grid w-full grid-cols-1 gap-8 not-prose">
     {
-      posts.map(({ frontmatter, url }) => (
-        <a href={url}>
+      blogEntries.map(({ data, slug }) => (
+        <a href={`/blog/${slug}`}>
           <div class="not-prose card card-bordered card-compact cursor-pointer rounded-lg bg-base-300 shadow-xl">
             <figure>
               <Image
-                src={frontmatter.image}
-                alt={frontmatter.title}
+                src={data.image}
+                alt={data.title}
                 format="webp"
                 width={720}
                 height={360}
               />
             </figure>
             <div class="prose-sm card-body">
-              <h2 class="card-title">{frontmatter.title}</h2>
+              <h2 class="card-title">{data.title}</h2>
               <time>
                 {new Intl.DateTimeFormat("en-US", { dateStyle: "full" }).format(
-                  frontmatter.date
+                  data.date
                 )}
               </time>
-              <p>{frontmatter.description}</p>
+              <p>{data.description}</p>
             </div>
           </div>
         </a>
